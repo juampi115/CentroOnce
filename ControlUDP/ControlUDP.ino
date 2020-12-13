@@ -34,18 +34,18 @@ void setup() {
   Serial.println(WiFi.localIP());
   Serial.printf("UDP server on port %d\n", 8888);
   Udp.begin(8888);
-  
+
   pinMode(Pulsador1, INPUT_PULLUP);
   pinMode(Pulsador2, INPUT_PULLUP);
   pinMode(Pulsador3, INPUT_PULLUP);
-  
+
 }
 void loop() {
   ///////////////////// Lectura de botones //////////////////////////////
   aux1 = digitalRead(Pulsador1);
   aux2 = digitalRead(Pulsador2);
   aux3 = digitalRead(Pulsador3);
-  
+
 
   //////// Lee el teclado y carga de mensaje  //////////////
   if (Serial.available() > 0) {
@@ -60,14 +60,14 @@ void loop() {
   if (aux1 == LOW && aux3 == HIGH) {          // si se aprieta boton 1 (local) manda "1" y no hay tanto
     ReplyBuffer[0] = '1';
   }
-  else {
-    ReplyBuffer[0] = '3';                     // si hay tanto manda "3"
+  else if (aux1 == LOW && aux3 == LOW) {      // si hay tanto manda "3"
+    ReplyBuffer[0] = '3';                     
   }
-  if (aux2 == LOW && aux3 == HIGH) {          // si se aprieta boton 2 (visitante) manda "2" y no hay tanto
+  else if (aux2 == LOW && aux3 == HIGH) {     // si se aprieta boton 2 (visitante) manda "2" y no hay tanto
     ReplyBuffer[0] = '2';
   }
-  else {
-    ReplyBuffer[0] = '4';                     // si hay tanto manda "4"
+  else if (aux2 == LOW && aux3 == LOW) {    // si hay tanto manda "4"
+    ReplyBuffer[0] = '4';                     
   }
   //////// Envio de mensaje //////////////
   // Udp.beginPacket(Udp.remoteIP(), 8888);  // Envia a una ip automatica (no funciona)
